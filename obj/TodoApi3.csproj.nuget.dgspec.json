@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\Natha\\TodoApi3\\TodoApi3.csproj": {}
+    "C:\\Users\\Natha\\TodoApi3\\TodoApi3.csproj": {}
   },
   "projects": {
-    "c:\\Users\\Natha\\TodoApi3\\TodoApi3.csproj": {
+    "C:\\Users\\Natha\\TodoApi3\\TodoApi3.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\Natha\\TodoApi3\\TodoApi3.csproj",
+        "projectUniqueName": "C:\\Users\\Natha\\TodoApi3\\TodoApi3.csproj",
         "projectName": "TodoApi3",
-        "projectPath": "c:\\Users\\Natha\\TodoApi3\\TodoApi3.csproj",
+        "projectPath": "C:\\Users\\Natha\\TodoApi3\\TodoApi3.csproj",
         "packagesPath": "C:\\Users\\Natha\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\Natha\\TodoApi3\\obj\\",
+        "outputPath": "C:\\Users\\Natha\\TodoApi3\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Natha\\AppData\\Roaming\\NuGet\\NuGet.Config",
