@@ -514,3 +514,122 @@ Replace the contents of `Program.cs` with the following code:
 :::code language="csharp" source="~/tutorials/min-web-api/samples/9.x/todoGroup/Program.cs" id="snippet_all":::
 
 # [Visual Studio Code](#tab/visual-studio-code)
+
+:::code language="csharp" source="~/tutorials/min-web-api/samples/9.x/todoGroup_SwaggerVersion/Program.cs" id="snippet_all":::
+
+---
+
+The preceding code has the following changes:
+
+* Adds `var todoItems = app.MapGroup("/todoitems");` to set up the group using the URL prefix `/todoitems`.
+* Changes all the `app.Map<HttpVerb>` methods to `todoItems.Map<HttpVerb>`.
+* Removes the URL prefix `/todoitems` from the `Map<HttpVerb>` method calls.
+
+Test the endpoints to verify that they work the same.
+
+## Use the TypedResults API
+
+Returning <xref:Microsoft.AspNetCore.Http.TypedResults> rather than <xref:Microsoft.AspNetCore.Http.Results> has several advantages, including testability and automatically returning the response type metadata for OpenAPI to describe the endpoint. For more information, see [TypedResults vs Results](/aspnet/core/fundamentals/minimal-apis/responses#typedresults-vs-results).
+
+The `Map<HttpVerb>` methods can call route handler methods instead of using lambdas. To see an example, update *Program.cs* with the following code:
+
+# [Visual Studio](#tab/visual-studio)
+
+:::code language="csharp" source="~/tutorials/min-web-api/samples/9.x/todoTypedResults/Program.cs" id="snippet_all":::
+
+# [Visual Studio Code](#tab/visual-studio-code)
+
+:::code language="csharp" source="~/tutorials/min-web-api/samples/9.x/todoTypedResults_SwaggerVersion/Program.cs" id="snippet_all":::
+
+---
+
+The `Map<HttpVerb>` code now calls methods instead of lambdas:
+
+:::code language="csharp" source="~/tutorials/min-web-api/samples/9.x/todoTypedResults/Program.cs" id="snippet_group":::
+
+These methods return objects that implement <xref:Microsoft.AspNetCore.Http.IResult> and are defined by <xref:Microsoft.AspNetCore.Http.TypedResults>:
+
+:::code language="csharp" source="~/tutorials/min-web-api/samples/9.x/todoTypedResults/Program.cs" id="snippet_handlers":::
+
+Unit tests can call these methods and test that they return the correct type. For example, if the method is `GetAllTodos`:
+
+:::code language="csharp" source="~/tutorials/min-web-api/samples/9.x/todoTypedResults/Program.cs" id="snippet_getalltodos":::
+
+Unit test code can verify that an object of type [Ok\<Todo[]>](xref:Microsoft.AspNetCore.Http.HttpResults.Ok%601.Value) is returned from the handler method. For example:
+
+```csharp
+public async Task GetAllTodos_ReturnsOkOfTodosResult()
+{
+    // Arrange
+    var db = CreateDbContext();
+
+    // Act
+    var result = await TodosApi.GetAllTodos(db);
+
+    // Assert: Check for the correct returned type
+    Assert.IsType<Ok<Todo[]>>(result);
+}
+```
+
+<a name="over-post-v7"></a>
+
+## Prevent over-posting
+
+Currently the sample app exposes the entire `Todo` object. Production apps In production applications, a subset of the model is often used to restrict the data that can be input and returned. There are multiple reasons behind this and security is a major one. The subset of a model is usually referred to as a Data Transfer Object (DTO), input model, or view model. **DTO** is used in this article.
+
+A DTO can be used to:
+
+* Prevent over-posting.
+* Hide properties that clients aren't supposed to view.
+* Omit some properties to reduce payload size.
+* Flatten object graphs that contain nested objects. Flattened object graphs can be more convenient for clients.
+
+To demonstrate the DTO approach, update the `Todo` class to include a secret field:
+
+:::code language="csharp" source="~/tutorials/min-web-api/samples/9.x/todoDTO/Todo.cs":::
+
+The secret field needs to be hidden from this app, but an administrative app could choose to expose it.
+
+Verify you can post and get the secret field.
+
+Create a file named `TodoItemDTO.cs` with the following code:
+
+:::code language="csharp" source="~/tutorials/min-web-api/samples/9.x/todoDTO/TodoItemDTO.cs":::
+
+Replace the contents of the `Program.cs` file with the following code to use this DTO model:
+
+# [Visual Studio](#tab/visual-studio)
+
+:::code language="csharp" source="~/tutorials/min-web-api/samples/9.x/todoDTO/Program.cs" id="snippet_all":::
+
+# [Visual Studio Code](#tab/visual-studio-code)
+
+:::code language="csharp" source="~/tutorials/min-web-api/samples/9.x/todoDTO_SwaggerVersion/Program.cs" id="snippet_all":::
+
+---
+
+Verify you can post and get all fields except the secret field.
+
+<a name="diff-v7"></a>
+
+## Troubleshooting with the completed sample
+
+If you run into a problem you can't resolve, compare your code to the completed project. [View or download completed project](https://github.com/dotnet/AspNetCore.Docs/tree/main/aspnetcore/tutorials/min-web-api/samples) ([how to download](xref:index#how-to-download-a-sample)).
+
+## Next steps
+
+* [Configure JSON serialization options](xref:fundamentals/minimal-apis/responses#configure-json-serialization-options).
+* Handle errors and exceptions: The [developer exception page](xref:web-api/handle-errors#developer-exception-page) is enabled by default in the development environment for minimal API apps. For information about how to handle errors and exceptions, see [Handle errors in ASP.NET Core APIs](xref:web-api/handle-errors).
+* For an example of testing a minimal API app, see [this GitHub sample](https://github.com/dotnet/AspNetCore.Docs.Samples/tree/main/fundamentals/minimal-apis/samples/MinApiTestsSample).
+* [OpenAPI support in minimal APIs](xref:fundamentals/openapi/aspnetcore-openapi).
+* [Quickstart: Publish to Azure](/azure/app-service/quickstart-dotnetcore).
+* [Organizing ASP.NET Core Minimal APIs](https://www.tessferrandez.com/blog/2023/10/31/organizing-minimal-apis.html).
+
+### Learn more
+
+See <xref:fundamentals/minimal-apis>
+
+:::moniker-end
+
+[!INCLUDE[](~/tutorials/min-web-api/includes/min-web-api6-7.md)]
+[!INCLUDE[](~/tutorials/min-web-api/includes/min-web-api8.md)]
