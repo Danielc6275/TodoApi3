@@ -20,6 +20,7 @@ dotnet dev-certs https --trust
 ```
 - Select **Yes** if you agree to trust the certificate.
 - Press to **Run** and then **Run without debugging** to run the app.  Make sure to install the C sharp extension.
+==============
 NuGet-packages
 ==============
 - Run the commands
